@@ -1,14 +1,15 @@
 INSTALL_BOOTSTRAP=true
 INSTALL_SUBLIME=true
-INSTALL_HIPCHAT=true
-INSTALL_SPOTIFY=true
-INSTALL_RUBY=true
-INSTALL_VAGRANT=true
-
+INSTALL_HIPCHAT=false
+INSTALL_SPOTIFY=false
+INSTALL_RUBY=false
+INSTALL_VAGRANT=false
+INSTALL_FILES=true
+INSTALL_STARTUP=true
 
 if $INSTALL_BOOTSTRAP; then
   echo '-- bootstrapping system'
-  sudo apt-get -y install curl git vim indicator-multiload hamster-indicator chromium-browser keepassx virtualbox-qt ubuntu-restricted-extras indicator-cpufreq
+  sudo apt-get -y install curl git vim indicator-multiload hamster-indicator chromium-browser keepassx virtualbox-qt ubuntu-restricted-extras indicator-cpufreq guake
   sudo apt-get remove unity-lens-shopping
 fi
 
@@ -100,3 +101,35 @@ if $INSTALL_VAGRANT; then
   rm vagrant_1.2.2_x86_64.deb
   vagrant plugin install vagrant-berkshelf
 fi
+
+if $INSTALL_FILES; then
+  echo '-- installing files'
+  cp -r /media/jlope001/archive/backup/.ssh ~/.
+  cp -r /media/jlope001/archive/backup/hamster-applet ~/.local/share/.
+fi
+
+if $INSTALL_STARTUP; then
+  echo '-- installing startup'
+  echo "[Desktop Entry]
+Terminal=false
+Type=Application
+Categories=
+GenericName=
+NoDisplay=true
+Exec=hamster-indicator" | sudo tee /etc/xdg/autostart/hamster-applet.desktop
+  echo "[Desktop Entry]
+Terminal=false
+Type=Application
+Categories=
+GenericName=
+NoDisplay=false
+Exec=guake" | sudo tee /etc/xdg/autostart/guake.desktop
+  echo "[Desktop Entry]
+Terminal=false
+Type=Application
+Categories=
+GenericName=
+NoDisplay=true
+Exec=indicator-multiload" | sudo tee /etc/xdg/autostart/indicator-multiload.desktop
+fi
+
