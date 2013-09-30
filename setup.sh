@@ -1,11 +1,11 @@
-INSTALL_BOOTSTRAP=true
+INSTALL_BOOTSTRAP=false
 INSTALL_SUBLIME=true
-INSTALL_HIPCHAT=true
-INSTALL_SPOTIFY=true
-INSTALL_RUBY=true
-INSTALL_VAGRANT=true
-INSTALL_FILES=true
-INSTALL_STARTUP=true
+INSTALL_HIPCHAT=false
+INSTALL_SPOTIFY=false
+INSTALL_RUBY=false
+INSTALL_VAGRANT=false
+INSTALL_FILES=false
+INSTALL_STARTUP=false
 
 if $INSTALL_BOOTSTRAP; then
   echo '-- bootstrapping system'
@@ -18,11 +18,11 @@ if $INSTALL_SUBLIME; then
   sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
   sudo apt-get update
   sudo apt-get install sublime-text-installer
-	
+
   echo '-- create directories'
   mkdir -p ~/.config/sublime-text-3/Installed\ Packages
   mkdir -p ~/.config/sublime-text-3/Packages/User
-  
+
   echo '-- install custom sublime preferences'
   echo '
 // Settings in here override those in "Default/Preferences.sublime-settings",
@@ -47,7 +47,7 @@ if $INSTALL_SUBLIME; then
 }' > ~/.config/sublime-text-3/Packages/User/Python.sublime-settings
 
   wget https://sublime.wbond.net/Package%20Control.sublime-package
-  mv ~/Package\ Control.sublime-package ~/.config/sublime-text-3/Installed\ Packages/.
+  mv Package\ Control.sublime-package ~/.config/sublime-text-3/Installed\ Packages/.
 
   git clone https://github.com/jlope001/Flake8Lint.git "Python Flake8 Lint"
   rm -rf ~/.config/sublime-text-3/Packages/Python\ Flake8\ Lint
@@ -116,6 +116,19 @@ if $INSTALL_FILES; then
   cp -r ~/archive/backup/.ssh ~/.
   chmod -R 700 ~/.ssh
   cp -r ~/archive/backup/hamster-applet ~/.local/share/.
+
+  echo '-- creating bookmarks'
+  BOOKMARKS_FILE=$(cat ~/.config/gtk-3.0/bookmarks | grep 'blackjack' | wc -l)
+
+if [ $BOOKMARKS_FILE -ge 1 ];
+  then
+    echo '-- not adding bookmarks'
+  else
+    echo '-- adding bookmarks'
+    echo "sftp://vagrant@localhost:2222/home/vagrant vm" >> ~/.config/gtk-3.0/bookmarks
+    echo "sftp://j0kerz@jlope001.dyndns.org:1604/home/j0kerz blackjack" >> ~/.config/gtk-3.0/bookmarks
+  fi
+
 fi
 
 if $INSTALL_STARTUP; then
