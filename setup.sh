@@ -8,7 +8,7 @@ INSTALL_FILES=true
 INSTALL_STARTUP=true
 
 # CONFIG INFORMATION
-BACKUP_DIRECTORY='~/archive/backup'
+BACKUP_DIRECTORY='/mnt/archive/backup'
 
 #
 #
@@ -17,10 +17,10 @@ BACKUP_DIRECTORY='~/archive/backup'
 #
 if $INSTALL_BOOTSTRAP; then
   echo '-- bootstrapping system'
-  sudo apt-get -y install curl git vim indicator-multiload hamster-indicator chromium-browser keepassx virtualbox-qt ubuntu-restricted-extras indicator-cpufreq guake
+  sudo apt-get -y install curl git vim indicator-multiload hamster-indicator chromium-browser keepassx virtualbox-qt ubuntu-restricted-extras indicator-cpufreq guake rdiff-backup
   sudo apt-get remove unity-lens-shopping
 
-  sudo add-apt-repository ppa:gencfsm && sudo apt-get update && sudo apt-get install gnome-encfs-manager
+  sudo add-apt-repository -y ppa:gencfsm && sudo apt-get update && sudo apt-get -y install gnome-encfs-manager
 fi
 
 #
@@ -39,27 +39,9 @@ if $INSTALL_SUBLIME; then
   mkdir -p ~/.config/sublime-text-3/Packages/User
 
   echo '-- install custom sublime preferences'
-  echo '
-// Settings in here override those in "Default/Preferences.sublime-settings",
-// and are overridden in turn by file type specific settings.
-{
-    // The number of spaces a tab is considered equal to
-    "tab_size": 2,
+  cp $BACKUP_DIRECTORY/preferences_sublime_settings ~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings
 
-    // Set to true to insert spaces when tab is pressed
-    "translate_tabs_to_spaces": true,
-
-    // Set to true to removing trailing white space on save
-    "trim_trailing_white_space_on_save": true,
-}' > ~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings
-
-  echo '
-// Settings in here override those in "Default/Preferences.sublime-settings",
-// and are overridden in turn by file type specific settings.
-{
-    // The number of spaces a tab is considered equal to
-    "tab_size": 4,
-}' > ~/.config/sublime-text-3/Packages/User/Python.sublime-settings
+  cp $BACKUP_DIRECTORY/python_sublime_settings ~/.config/sublime-text-3/Packages/User/Python.sublime-settings
 
   wget https://sublime.wbond.net/Package%20Control.sublime-package
   mv Package\ Control.sublime-package ~/.config/sublime-text-3/Installed\ Packages/.
@@ -152,6 +134,7 @@ if $INSTALL_FILES; then
   chmod -R 700 ~/.ssh
   cp -r $BACKUP_DIRECTORY/hamster-applet ~/.local/share/.
   cp $BACKUP_DIRECTORY/bookmarks ~/.config/gtk-3.0/bookmarks
+  cp $BACKUP_DIRECTORY/.gitconfig ~/.
 fi
 
 #
