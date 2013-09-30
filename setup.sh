@@ -1,9 +1,9 @@
 INSTALL_BOOTSTRAP=true
 INSTALL_SUBLIME=true
-INSTALL_HIPCHAT=false
-INSTALL_SPOTIFY=false
-INSTALL_RUBY=false
-INSTALL_VAGRANT=false
+INSTALL_HIPCHAT=true
+INSTALL_SPOTIFY=true
+INSTALL_RUBY=true
+INSTALL_VAGRANT=true
 INSTALL_FILES=true
 INSTALL_STARTUP=true
 
@@ -18,8 +18,12 @@ if $INSTALL_SUBLIME; then
   sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
   sudo apt-get update
   sudo apt-get install sublime-text-installer
-
-  # install custom preferences
+	
+  echo '-- create directories'
+  mkdir -p ~/.config/sublime-text-3/Installed\ Packages
+  mkdir -p ~/.config/sublime-text-3/Packages/User
+  
+  echo '-- install custom sublime preferences'
   echo '
 // Settings in here override those in "Default/Preferences.sublime-settings",
 // and are overridden in turn by file type specific settings.
@@ -43,9 +47,9 @@ if $INSTALL_SUBLIME; then
 }' > ~/.config/sublime-text-3/Packages/User/Python.sublime-settings
 
   wget https://sublime.wbond.net/Package%20Control.sublime-package
-  mv Package\ Control.sublime-package ~/.config/sublime-text-3/Installed\ Packages/.
+  mv ~/Package\ Control.sublime-package ~/.config/sublime-text-3/Installed\ Packages/.
 
-  git clone git://github.com/jlope001-/Flake8Lint.git "Python Flake8 Lint"
+  git clone https://github.com/jlope001/Flake8Lint.git "Python Flake8 Lint"
   rm -rf ~/.config/sublime-text-3/Packages/Python\ Flake8\ Lint
   mv Python\ Flake8\ Lint ~/.config/sublime-text-3/Packages/.
 fi
@@ -56,10 +60,11 @@ if $INSTALL_HIPCHAT; then
   else
     echo '-- installing hipchat'
     echo "deb http://downloads.hipchat.com/linux/apt stable main" | sudo tee -a /etc/apt/sources.list.d/atlassian-hipchat.list
-    sudo wget -O - https://www.hipchat.com/keys/hipchat-linux.key | apt-key add -
+    wget -O - https://www.hipchat.com/keys/hipchat-linux.key | sudo apt-key add -
     sudo apt-get update
-    sudo apt-get -y install hipchat
   fi
+
+  sudo apt-get -y install hipchat
 fi
 
 if $INSTALL_SPOTIFY; then
@@ -67,20 +72,21 @@ if $INSTALL_SPOTIFY; then
   SPOTIFY=$(cat /etc/apt/sources.list | grep spotify | wc -l)
   if [ ! $SPOTIFY -eq 1 ];
   then
-    echo '-- not installing spotify'
-  else
     echo '-- installing spotify'
     echo "deb http://repository.spotify.com stable non-free" | sudo tee -a /etc/apt/sources.list
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 94558F59
     sudo apt-get update
-    sudo apt-get install -y spotify-client
+  else
+    echo '-- not installing spotify'
   fi
+
+  sudo apt-get install -y spotify-client
 fi
 
 if $INSTALL_RUBY; then
   echo '-- installing ruby'
   \curl -L https://get.rvm.io | bash -s stable --ruby
-  source /home/jlope001/.rvm/scripts/rvm
+  source ~/.rvm/scripts/rvm
   rvm install 1.9.3
   rvm --default use 1.9.3
   RVM_SOURCE=$(cat ~/.bashrc | grep '.rvm/scripts/rvm' | wc -l)
@@ -103,9 +109,13 @@ if $INSTALL_VAGRANT; then
 fi
 
 if $INSTALL_FILES; then
+  echo '-- seting up symlinks'
+  ln -s /mnt/archive ~/.
+
   echo '-- installing files'
-  cp -r /media/jlope001/archive/backup/.ssh ~/.
-  cp -r /media/jlope001/archive/backup/hamster-applet ~/.local/share/.
+  cp -r ~/archive/backup/.ssh ~/.
+  chmod -R 700 ~/.ssh
+  cp -r ~/archive/backup/hamster-applet ~/.local/share/.
 fi
 
 if $INSTALL_STARTUP; then
