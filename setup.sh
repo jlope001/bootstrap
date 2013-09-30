@@ -1,18 +1,33 @@
-INSTALL_BOOTSTRAP=false
+INSTALL_BOOTSTRAP=true
 INSTALL_SUBLIME=true
-INSTALL_HIPCHAT=false
-INSTALL_SPOTIFY=false
-INSTALL_RUBY=false
-INSTALL_VAGRANT=false
-INSTALL_FILES=false
-INSTALL_STARTUP=false
+INSTALL_HIPCHAT=true
+INSTALL_SPOTIFY=true
+INSTALL_RUBY=true
+INSTALL_VAGRANT=true
+INSTALL_FILES=true
+INSTALL_STARTUP=true
 
+# CONFIG INFORMATION
+BACKUP_DIRECTORY='~/archive/backup'
+
+#
+#
+# BOOTSTRAP FILES
+#
+#
 if $INSTALL_BOOTSTRAP; then
   echo '-- bootstrapping system'
   sudo apt-get -y install curl git vim indicator-multiload hamster-indicator chromium-browser keepassx virtualbox-qt ubuntu-restricted-extras indicator-cpufreq guake
   sudo apt-get remove unity-lens-shopping
+
+  sudo add-apt-repository ppa:gencfsm && sudo apt-get update && sudo apt-get install gnome-encfs-manager
 fi
 
+#
+#
+# SUBLIME
+#
+#
 if $INSTALL_SUBLIME; then
   echo '-- installing sublime'
   sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
@@ -67,6 +82,11 @@ if $INSTALL_HIPCHAT; then
   sudo apt-get -y install hipchat
 fi
 
+#
+#
+# HIPCHAT
+#
+#
 if $INSTALL_SPOTIFY; then
   echo '-- installing spotify'
   SPOTIFY=$(cat /etc/apt/sources.list | grep spotify | wc -l)
@@ -83,6 +103,11 @@ if $INSTALL_SPOTIFY; then
   sudo apt-get install -y spotify-client
 fi
 
+#
+#
+# RVM
+#
+#
 if $INSTALL_RUBY; then
   echo '-- installing ruby'
   \curl -L https://get.rvm.io | bash -s stable --ruby
@@ -100,6 +125,11 @@ if $INSTALL_RUBY; then
   fi
 fi
 
+#
+#
+# VAGRANT
+#
+#
 if $INSTALL_VAGRANT; then
   echo '-- installing vagrant'
   wget http://files.vagrantup.com/packages/7e400d00a3c5a0fdf2809c8b5001a035415a607b/vagrant_1.2.2_x86_64.deb
@@ -108,29 +138,27 @@ if $INSTALL_VAGRANT; then
   vagrant plugin install vagrant-berkshelf
 fi
 
+#
+#
+# FILES
+#
+#
 if $INSTALL_FILES; then
   echo '-- seting up symlinks'
   ln -s /mnt/archive ~/.
 
   echo '-- installing files'
-  cp -r ~/archive/backup/.ssh ~/.
+  cp -r $BACKUP_DIRECTORY/.ssh ~/.
   chmod -R 700 ~/.ssh
-  cp -r ~/archive/backup/hamster-applet ~/.local/share/.
-
-  echo '-- creating bookmarks'
-  BOOKMARKS_FILE=$(cat ~/.config/gtk-3.0/bookmarks | grep 'blackjack' | wc -l)
-
-if [ $BOOKMARKS_FILE -ge 1 ];
-  then
-    echo '-- not adding bookmarks'
-  else
-    echo '-- adding bookmarks'
-    echo "sftp://vagrant@localhost:2222/home/vagrant vm" >> ~/.config/gtk-3.0/bookmarks
-    echo "sftp://j0kerz@jlope001.dyndns.org:1604/home/j0kerz blackjack" >> ~/.config/gtk-3.0/bookmarks
-  fi
-
+  cp -r $BACKUP_DIRECTORY/hamster-applet ~/.local/share/.
+  cp $BACKUP_DIRECTORY/bookmarks ~/.config/gtk-3.0/bookmarks
 fi
 
+#
+#
+# STARTUP
+#
+#
 if $INSTALL_STARTUP; then
   echo '-- installing startup'
   echo "[Desktop Entry]
