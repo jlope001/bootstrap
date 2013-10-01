@@ -135,6 +135,7 @@ if $INSTALL_FILES; then
   cp -r $BACKUP_DIRECTORY/hamster-applet ~/.local/share/.
   cp $BACKUP_DIRECTORY/bookmarks ~/.config/gtk-3.0/bookmarks
   cp $BACKUP_DIRECTORY/.gitconfig ~/.
+  cp $BACKUP_DIRECTORY/.bash_aliases ~/.
 fi
 
 #
@@ -167,3 +168,4 @@ NoDisplay=true
 Exec=indicator-multiload" | sudo tee /etc/xdg/autostart/indicator-multiload.desktop
 fi
 
+#GOOGLE_TALK="https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb"
