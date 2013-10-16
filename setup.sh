@@ -17,7 +17,7 @@ BACKUP_DIRECTORY='/mnt/archive/backup'
 #
 if $INSTALL_BOOTSTRAP; then
   echo '-- bootstrapping system'
-  sudo apt-get -y install curl git vim indicator-multiload hamster-indicator chromium-browser keepassx virtualbox-qt ubuntu-restricted-extras indicator-cpufreq guake rdiff-backup
+  sudo apt-get -y install curl git vim indicator-multiload hamster-indicator chromium-browser keepassx virtualbox-qt ubuntu-restricted-extras indicator-cpufreq guake rdiff-backup libxslt-dev libxml2-dev
   sudo apt-get remove unity-lens-shopping
 
   sudo add-apt-repository -y ppa:gencfsm && sudo apt-get update && sudo apt-get -y install gnome-encfs-manager
