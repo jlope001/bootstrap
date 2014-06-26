@@ -1,4 +1,4 @@
-# This script is used to quickly bootstrap an ubuntu desktop with stuff i use 
+# This script is used to quickly bootstrap an ubuntu desktop with stuff i use
 #
 # Below are the boolean fields of items you can install.  It makes life
 # a lot easier once you have done within a script.
@@ -14,7 +14,6 @@ INSTALL_VAGRANT=true
 INSTALL_FILES=true
 INSTALL_STARTUP=true
 INSTALL_GOOGLE=true
-INSTALL_NVIDIA=true
 
 # CONFIG INFORMATION
 BACKUP_DIRECTORY='/mnt/archive/backup'
@@ -28,13 +27,12 @@ if $INSTALL_BOOTSTRAP; then
   echo '-- bootstrapping system'
   sudo apt-get -y install curl git vim indicator-multiload hamster-indicator chromium-browser keepassx virtualbox-qt ubuntu-restricted-extras indicator-cpufreq guake rdiff-backup libxslt-dev libxml2-dev libdvdread4 libavformat-extra-53 libavcodec-extra-53 libnss-myhostname
   sudo apt-get remove unity-lens-shopping
-
   sudo add-apt-repository -y ppa:gencfsm && sudo apt-get update && sudo apt-get -y install gnome-encfs-manager
 
   # enable dvd playback
   sudo /usr/share/doc/libdvdread4/install-css.sh
 
-  # disable privacy stuff
+  # disable amazon privacy stuff
   gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
 fi
 
@@ -135,9 +133,9 @@ fi
 #
 if $INSTALL_VAGRANT; then
   echo '-- installing vagrant'
-  wget http://files.vagrantup.com/packages/7ec0ee1d00a916f80b109a298bab08e391945243/vagrant_1.2.7_x86_64.deb
-  sudo dpkg -i vagrant_1.2.7_x86_64.deb
-  rm vagrant_1.2.7_x86_64.deb
+  wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
+  sudo dpkg -i vagrant_1.6.3_x86_64.deb
+  rm vagrant_1.6.3_x86_64.deb
   vagrant plugin install vagrant-berkshelf
 fi
 
@@ -199,20 +197,4 @@ if $INSTALL_GOOGLE; then
   wget https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb
   sudo dpkg -i google-talkplugin_current_amd64.deb
   rm google-talkplugin_current_amd64.deb
-fi
-
-#
-#
-# NVIDIA SETTINGS
-#
-#
-if $INSTALL_NVIDIA; then
-  echo '-- installing nvidia settings'
-  sudo add-apt-repository -y ppa:bumblebee/stable
-  sudo apt-get update
-  sudo apt-get -y install bumblebee bumblebee-nvidia primus linux-headers-generic nvidia-319-updates nvidia-settings-319-updates
-  sudo sed -i "s/KernelDriver\=nvidia\-current/KernelDriver\=nvidia_319_updates/g" /etc/bumblebee/bumblebee.conf
-  sudo sed -i "s/Driver\=/Driver\=nvidia/g" /etc/bumblebee/bumblebee.conf
-  sudo sed -i "s/LibraryPath\=\/usr\/lib\/nvidia\-current\:\/usr\/lib32\/nvidia\-current/LibraryPath\=\/usr\/lib\/nvidia\-319\-updates\:\/usr\/lib32\/nvidia\-319\-updates/g" /etc/bumblebee/bumblebee.conf
-  sudo sed -i "s/XorgModulePath\=\/usr\/lib\/nvidia\-current\/xorg\,\/usr\/lib\/xorg\/modules/XorgModulePath\=\/usr\/lib\/nvidia\-319\-updates\/xorg\,\/usr\/lib\/xorg\/modules/g" /etc/bumblebee/bumblebee.conf
 fi
