@@ -16,8 +16,11 @@ fi
 # install required dependencies
 gem install berkshelf chef
 
+# install cookbooks dependencies
+berks
+
 echo -e "\e[0m---"
 echo -e ""
-echo -e "\e[100m\e[34mTo start the bootstrap in this terminal, you need to run \`source /home/$USER/.rvm/scripts/rvm\`"
+echo -e "\e[97m\e[40m\e[1mTo start the bootstrap in this terminal, you need to run \`source /home/$USER/.rvm/scripts/rvm\`"
 echo -e ""
 echo -e "\e[0m---"
