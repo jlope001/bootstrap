@@ -1,30 +1,60 @@
-# Linux Bootstrap Scripts
-This repository is a grouping of scripts I use to backup restore my personal files from a linux operating system.
+# Bootstrap System
+Whenever installing a new linux desktop, I always find myself installing the same pieces of software over, and over again.
 
-Below is a description of each folder in this repository and how it is used.
+My first stab at automating setup was a bash script.  It quickly became too complicated and difficult to maintain.  Enter [chef](http://www.getchef.com/chef/), specifically [chef-solo](http://docs.opscode.com/chef_solo.html).  Chef allows you to quickly, cleany provision your machine with minimal effort.
 
-## System Backup/Restore
-This folder contains two scripts that will allow you to backup an *entire* system and restore that backup.
+## Setup
+In order to bootstrap the system, you will need to install some pieces of software.
 
-### Backup
-We accomplish this by creating a system tarball.  It will include today's date so you can potentially run this script via cron.
-
-Credit - http://ubuntuforums.org/showthread.php?t=35087  The backup/restore instructions were found there.
-
-Run the following script as root.
+What we will install is RVM, chef, berkshelf.
 
 ```
-sudo system/backup.sh
+$ make setup
 ```
 
-Modify the script to update the exclude directory.
+### Software Installed
+* rvm
+* chef
+* berkshelf
 
-### Restore
-TODO
+### Post Setup
+If you are planning to install right after the setup command, you will need to source RVM from your current terminal with:
 
-## FAQ
-1. Why is this open source?
-Nothing found here is really private, but can be adapted to be used to suite your needs.
+```
+echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
+```
 
-2. Well I need this feature, how can I help implement it?
-Fork it, make the updates, issue pull request, profit!
+## Installation
+Once the requirements have been met, simply run the install command.
+
+```
+$ make install
+```
+
+### Software Installed
+Below is a list of all software installed during the chef run.
+
+| software            | reason                          |
+| ------------------- | ------------------------------- |
+| vim                 | development                     |
+| git                 | development                     |
+| chromium            | browse all the internets        |
+| keepassx            | password manager                |
+| nfs-common          | vm shared folder setup          |
+| nfs-kernel-server   | vm shared folder setup          |
+| gnome-encfs-manager | gnome encfs manager             |
+| hipchat             | chat software                   |
+| java                | oracle java                     |
+| spotify             | music                           |
+| sublime             | development                     |
+| vagrant             | manage vms                      |
+| guake               | terminal                        |
+| indicator-multiload | visual display of resources     |
+| hamster-indicator   | track how you utilize your time |
+| indicator-cpufreq   | control cpu utilization         |
+| google-talkplugin   | google hangouts                 |
+| my-weather-indicator| weather applet                  |
+| variety             | rotate wallpaper                |
+| plex                | stream video via DLNA           |
+| steam               | video games                     |
+| zsh                 | terminal                        |
