@@ -5,11 +5,19 @@
 .*.sw[a-z]
 *.un~
 pkg/
+/*.pid
+/remote_file
+/gpg
+/*.key
+/*.out
+
 
 # Berkshelf
 .vagrant
 /cookbooks
+/berks-cookbooks
 Berksfile.lock
+
 
 # Bundler
 Gemfile.lock
