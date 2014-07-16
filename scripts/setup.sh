@@ -14,10 +14,7 @@ else
 fi
 
 # install required dependencies
-gem install berkshelf chef
-
-# install cookbooks dependencies
-berks
+bundle install
 
 echo -e "\e[0m---"
 echo -e ""
