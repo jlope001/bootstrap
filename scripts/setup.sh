@@ -23,6 +23,7 @@ elif [[ $DISTRO == centos* ]]; then
 fi
 
 # install rvm and add source
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 \curl -L https://get.rvm.io | bash -s stable --ruby
 source ~/.rvm/scripts/rvm
 RVM_SOURCE=$(cat ~/.bashrc | grep '.rvm/scripts/rvm' | wc -l)
@@ -33,6 +34,12 @@ else
   echo '-- adding rvm source entry'
   echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
 fi
+
+# remove rvm 2.x and install 1.x
+rvm remove ruby-2
+rvm install ruby-1.9
+rvm use ruby-1.9
+rvm default ruby-1.9
 
 # install required dependencies
 bundle install
