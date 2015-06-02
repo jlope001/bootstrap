@@ -17,9 +17,9 @@ fi
 unset UNAME
 
 if [ "$DISTRO" == "Ubuntu" ]; then
-  sudo apt-get install curl wget
+  sudo apt-get install curl wget git
 elif [[ $DISTRO == centos* ]]; then
-  sudo yum install curl wget
+  sudo yum install curl wget git
 fi
 
 # install rvm and add source
@@ -35,11 +35,7 @@ else
   echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
 fi
 
-# remove rvm 2.x and install 1.x
-rvm remove ruby-2
-rvm install ruby-1.9
-rvm use ruby-1.9
-rvm default ruby-1.9
+gem install bundle
 
 # install required dependencies
 bundle install
