@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CUR_DIRECTORY=`pwd`
+
 # Determine OS platform
 UNAME=$(uname | tr "[:upper:]" "[:lower:]")
 # If Linux, try to determine specific distribution
@@ -22,26 +24,27 @@ elif [[ $DISTRO == centos* ]]; then
   sudo yum install curl wget git
 fi
 
-# install rvm and add source
-gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-\curl -L https://get.rvm.io | bash -s stable --ruby
-source ~/.rvm/scripts/rvm
-RVM_SOURCE=$(cat ~/.bashrc | grep '.rvm/scripts/rvm' | wc -l)
-if [ $RVM_SOURCE -ge 1 ];
-then
-  echo '-- not adding rvm source entry'
-else
-  echo '-- adding rvm source entry'
-  echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
-fi
+# setup rbenv
+sudo apt-get install \
+	git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev \
+	sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
+cd $HOME
+git clone git://github.com/sstephenson/rbenv.git .rbenv
+git clone git://github.com/sstephenson/ruby-build.git $HOME/.rbenv/plugins/ruby-build
+mkdir -p ~/.rbenv/plugins
+git clone git://github.com/dcarley/rbenv-sudo.git ~/.rbenv/plugins/rbenv-sudo
 
+if [ ! -f $HOME/.rbenv/.chef_setup ]; then
+	echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
+	echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+	echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+
+	touch $HOME/.rbenv/.chef_setup
+fi
+source ~/.bashrc
+
+cd $CUR_DIRECTORY
 gem install bundle
 
 # install required dependencies
 bundle install
-
-echo -e "\e[0m---"
-echo -e ""
-echo -e "\e[97m\e[40m\e[1mTo start the bootstrap in this terminal, you need to run \`source /home/$USER/.rvm/scripts/rvm\`"
-echo -e ""
-echo -e "\e[0m---"
