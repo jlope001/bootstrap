@@ -49,4 +49,4 @@ cd $CUR_DIRECTORY
 gem install bundle
 
 # install required dependencies
-bundle install
+bundle install -j`nproc`
